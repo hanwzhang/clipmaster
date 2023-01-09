@@ -12,6 +12,8 @@ ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 dn = 'https://nydailynews.search.yahoo.com/search?p=adams'
 
+# ** try creating df outside the scheduler and adding scraped data to the df
+
 # scrape every 20 seconds
 sched = BlockingScheduler()
 @sched.scheduled_job('interval', seconds=20)
@@ -41,6 +43,7 @@ def timed_job():
     df = pd.DataFrame(d)
 
     #write results into an excel file
-    df.to_excel("dn_"+str(datetime.datetime.now())+".xlsx", sheet_name="sheet", index=False)
+    #df.to_excel("dn_"+str(datetime.datetime.now())+".xlsx", sheet_name="sheet", index=False)
+    print(df)
     print('DN is scraped at:', datetime.datetime.now())
 sched.start()
