@@ -19,13 +19,15 @@ def timed_job():
 
     fhand = urllib.request.urlopen(dn, context = ctx) #similar to fhand = open('...') for a local file
     file = fhand.read() #decode if necessary
-    x = BeautifulSoup(file, 'html.parser') #the object 'x' is a sorted/parsed version of the html file
-    anchortags = x('a') #a list of anchortags
+    x = BeautifulSoup(file, 'html.parser').find('ul', class_= 'compArticleList') #the object 'x' is a sorted/parsed subset of the html file with only the articles
+    articles = x('a') #a list of tags containing article titles and links
+    times = x('span') #a list of tags containing time that articles are last updated
 
-    #create dataframe of titles and links
+    #create dataframe of titles, links, dates
     titles = []
     links = []
-    for tag in anchortags:
+    dates = []
+    for tag in articles:
         y = tag.get('class', None)
         if isinstance(y, list) == True:
             if 'thmb' in y[0]:
@@ -33,7 +35,9 @@ def timed_job():
                 links.append(tag.get('href', None))
             else: continue
         else: continue
-    d = {'Titles': titles, 'Links': links}
+    for tag in times:
+        dates.append(tag.contents[0])
+    d = {'Titles': titles, 'Links': links, 'Dates': dates}
     df = pd.DataFrame(d)
 
     #write results into an excel file
