@@ -10,10 +10,10 @@ ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
 #scraping titles and links from ny daily news
-url = 'https://nydailynews.search.yahoo.com/search?p=adams'
+#url = 'https://nydailynews.search.yahoo.com/search?p=adams' develop with a saved html file to avoid sending too many requests, then switch to the url
 fhand = urllib.request.urlopen(url, context = ctx) #similar to fhand = open('...') for a local file
 file = fhand.read() #decode if necessary
-x = BeautifulSoup(file, 'html.parser') #the object 'x' is a sorted/parsed version of the html file
+x = BeautifulSoup(file, 'html.parser').find('ul', class_="compArticleList") #the object 'x' is a sorted/parsed version of the html file
 anchortags = x('a') #a list of anchortags
 
 #create dataframe of titles and links
