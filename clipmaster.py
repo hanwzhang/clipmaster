@@ -4,8 +4,9 @@ from bs4.element import Comment
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
-# setup outlet shorthands
-shorthand = {'nytimes.com':('NY TIMES','css-at9mc1 evys1bk0',[]),
+# setup outlet general rules, format as follows:
+# 'site':('SHORTHAND', 'classWeWantAsText', ['blockedClass1','blockedClass2', ...])
+generalRule = {'nytimes.com':('NY TIMES','css-at9mc1 evys1bk0',[]),
 'nypost.com':('NY POST', 'single__content entry-content m-bottom', ['single__inline-module alignleft','comments-inline-cta__wrap','credit']),
 'nymag.com':('NY MAGAZINE', 'article-content inline',['credit','container','text-form-wrapper']),
 'nydailynews.com':('DAILY NEWS','default__StyledText-sc-1wxyvyl-0 hnShxL body-paragraph',[]),
@@ -17,59 +18,73 @@ shorthand = {'nytimes.com':('NY TIMES','css-at9mc1 evys1bk0',[]),
 'silive.com':('SI ADVANCE','entry-content',[]),
 'thecity.nyc':('THE CITY','RichTextArticleBody RichTextBody',['HTLAds-with-background','Form-newsletter-breaker-wrapper']),
 'amny.com':('AMNY','article-content',['promo-oneliner newsletter','image-credit']),
-'crainsnewyork.com':("CRAIN'S NY",'field--name-field-paragraph-body',['']),
+'crainsnewyork.com':("CRAIN'S NY",'field--name-field-paragraph-body',[]),
 'gothamgazette.com':('GOTHAM GAZETTE','art-article',[]),
 'hellgatenyc.com':('HELL GATE','PostContent_wrapper__5uSJk',[]),
-'citylimits.org':('CITY LIMITS','elementor-element elementor-element-670ff5a2 post-content elementor-widget elementor-widget-theme-post-content',['hatley-campaign Campaign CampaignType--inline']),
+'citylimits.org':('CITY LIMITS','elementor-element elementor-element-670ff5a2 post-content elementor-widget elementor-widget-theme-post-content',['hatley-campaign Campaign CampaignType--inline','wp-media-credit']),
 'ny.chalkbeat.org':('CHALKBEAT','RichTextArticleBody RichTextBody',['Page-articleBody-TagData','GoogleDfpAd-background is_filled']),
 'nyc.streetsblog.org':('STREETSBLOG','entry-content',['wp-caption-text','css-1dbjc4n r-13awgt0 r-12vffkv','share-bottom']),
 'cityandstateny.com':('CITY AND STATE','js-content',['advert-tag-text']),
 'foxnews.com':('FOX','article-body',['caption'])}
 
-subject_shorthand = {'nytimes.com':'NYT',
+specialSubjectShort = {'nytimes.com':'NYT',
 'nypost.com':'NYP',
 'nydailynews.com':'DN',
 'nymag.com':'NY MAG'}
+specialBylinePos = {'nypost.com':('[class*=byline]',1),
+'gothamist.com':('[class*=byline]',1),
+'thecity.nyc':('[class*=AuthorByline-InPage]',0),
+'nytimes.com':('[class*=e1jsehar1]',0),
+'gothamgazette.com':('[class*=art-postauthoricon]',0),
+'citylimits.org':('[class*=fn]',0)}
+specialTitleTag = {'citylimits.org':'title',
+'gothamgazette.com':'title'}
+specialBannedTag = {'foxnews.com':['strong']}
 
-byline_pos = {}
-
-def get_website(link):
+def get_site_info(link):
     site = link.split('https://')[-1].split('www.')[-1].split('/')[0]
-    short = shorthand[site][0]
-    contentIdentifier = shorthand[site][1]
-    banList = shorthand[site][2]
-    return short, contentIdentifier, banList
+    try: short = generalRule[site][0]
+    except: short = "____"
+    contentIdentifier = generalRule[site][1]
+    bannedClass = generalRule[site][2]
+    try: bylinePos = specialBylinePos[site]
+    except: bylinePos = ('[class*=byline]',0) # default byline extraction
+    try: titleTag = specialTitleTag[site]
+    except: titleTag = 'h1'
+    try: bannedTag = specialBannedTag[site]
+    except: bannedTag = []
+    return short, contentIdentifier, bannedClass, bylinePos, titleTag, bannedTag
 
-def tag_content(link, element):
-    if element.parent.name not in ['p','a','em','i','strong','span','h2','h3']: judge = False
+def tag_content(link, element): # testing if a line is part of the text
+    generalTags = ['p','a','em','i','strong','span','li','h2','h3']
+    siteTags = [x for x in generalTags if x not in get_site_info(link)[5]]
+    if element.parent.name not in siteTags: judge = False
     elif isinstance(element, Comment): judge = False
     else:
         allParentClasses = []
         for parent in element.parents:
-            pClassL = parent.get('class')
-            try: pClass = ' '.join(pClassL)
+            pClassList = parent.get('class')
+            try: pClass = ' '.join(pClassList)
             except: pClass = 'NA'
             allParentClasses.append(pClass)
-        #eClassL = element.parent.parent.get('class')
-        if get_website(link)[1] not in allParentClasses: judge = False
-        elif any(x in get_website(link)[2] for x in allParentClasses): judge = False
+        if get_site_info(link)[1] not in allParentClasses: judge = False
+        elif any(x in get_site_info(link)[2] for x in allParentClasses): judge = False
         else: judge = True
     return judge
 
-def get_info(link, soup):# create title, site & author, and link
-    try: title = soup.find('h1').string.split(' - ')[0].strip() #remove outlet at the end
+def generate_info(link, soup): # create formatted title, site, author and link
+    try: title = soup.find(get_site_info(link)[4]).string.split(' - ')[0].strip() #remove outlet at the end
     except: title = ''
-    try: sitesh = get_website(link)[0]
-    except: sitesh = "____"
-    byLine = soup.select('[class*=byline]')
-    try: auth = byLine[1].get_text().split('\t')[0].strip().split('By ')[-1]
-    except:
-        try: auth = byLine[0].get_text().split('\t')[0].strip().split('By ')[-1]
-        except: auth = ''
-    info = title +'\n'+ sitesh +' - '+ auth +'\n'+ link
+    byLine = soup.select(get_site_info(link)[3][0])
+    try: 
+        auth = byLine[get_site_info(link)[3][1]].get_text()
+        for x in ['\t','|','New York Daily News']: auth = auth.split(x)[0]
+        for x in ['By ','By','by ']: auth = auth.replace(x, '')
+    except: auth = ''
+    info = title +'\n'+ get_site_info(link)[0] +' - '+ auth +'\n'+ link
     return info
 
-def text_from_html(link, soup): 
+def text_from_html(link, soup): # created formatted text
     texts = soup.findAll(text=True)
     resultText = ''
     previous_a = False
@@ -97,21 +112,15 @@ url = input('Paste URL here:')
 driver = webdriver.Chrome()
 driver.get(url)
 result_soup = BeautifulSoup(driver.page_source, 'html.parser')
-
 f = open('clip.txt', 'w')
-f.write(get_info(url, result_soup)+text_from_html(url, result_soup))
+f.write(generate_info(url, result_soup)+text_from_html(url, result_soup))
 print('▬▬▬▬▬▬▬▬▬▬▬▬DONE▬▬▬▬▬▬▬▬▬▬▬▬')
 
 # Issues:
-# DN get author
 # AMNY, GG: because the text is <p><span>Text</span></p> and this affects previous_p & previous_a judgements
-# CRAIN'S, POLITICO PRO: use credentials?
-# FOX: remove read mores
 # STREETSBLOG cannot remove embedded twitter
-# CITY limits: headline is h2, byline is not called byline
-# maybe block 'read more's by removing lines in '[]'
-    # and remove lines that's all link
-# if it's just <a>,<i>,<em> inside <p>, there's no line break
+# if it's just <a>,<i>,<em> inside a <p> or starting right after a <p>, there's no line break
 
-# create a little script to test where the bylines are, create that as the new item in the dict
-# one universal fix for many issues: create a dict for parent.name, byline, etc. chosen, set current values to default and define ones that are different
+# Need to use credentials: CRAIN'S, POLITICO PRO, WSJ, DN, bloomberg
+#   but if you close the tab before the paywall loads you can get the whole thing for DN
+# build opinion detector by checking if there's 'opinion' between the first & second '/'
