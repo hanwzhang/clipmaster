@@ -3,11 +3,12 @@ from bs4 import BeautifulSoup
 from bs4.element import Comment
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+import re
 
 # setup outlet general rules, format as follows:
 # 'site':('SHORTHAND', 'classWeWantAsText', ['blockedClass1','blockedClass2', ...])
 generalRule = {'nytimes.com':('NY TIMES','css-at9mc1 evys1bk0',[]),
-'nypost.com':('NY POST', 'single__content entry-content m-bottom', ['inline-module__heading widget-heading widget-heading--underline','social-icons__icon--comments__count','single__inline-module alignleft','comments-inline-cta__wrap','credit']),
+'nypost.com':('NY POST', 'single__content entry-content m-bottom', ['inline-slideshow','inline-module__heading widget-heading widget-heading--underline','social-icons__icon--comments__count','single__inline-module alignleft','comments-inline-cta__wrap','credit']),
 'nymag.com':('NY MAGAZINE', 'article-content inline',['credit','container','text-form-wrapper']),
 'nydailynews.com':('DAILY NEWS','default__StyledText-sc-1wxyvyl-0 hnShxL body-paragraph',[]),
 'subscriber.politicopro.com':('POLITICO', 'media-article__text', []),
@@ -33,7 +34,7 @@ specialSubjectShort = {'nytimes.com':'NYT',
 'nymag.com':'NY MAG'}
 specialBylinePos = {'nypost.com':('[class*=byline]',1),
 'gothamist.com':('[class*=byline]',1),
-'thecity.nyc':('[class*=AuthorByline-InPage]',0),
+'thecity.nyc':('[class*=Page-authors]',0),
 'nytimes.com':('[class*=e1jsehar1]',0),
 'gothamgazette.com':('[class*=art-postauthoricon]',0),
 'citylimits.org':('[class*=fn]',0)}
@@ -79,7 +80,7 @@ def generate_info(link, soup): # create formatted title, site, author and link
     try: 
         auth = byLine[get_site_info(link)[3][1]].get_text().strip()
         for x in ['\t','|','New York Daily News']: auth = auth.split(x)[0]
-        for x in ['By ','By','by ']: auth = auth.replace(x, '')
+        for x in ['By ','By','by ','\n']: auth = auth.replace(x, '')
     except: auth = ''
     info = title +'\n'+ get_site_info(link)[0] +' - '+ auth +'\n'+ link
     return info
@@ -123,6 +124,8 @@ print('▬▬▬▬▬▬▬▬▬▬▬▬DONE▬▬▬▬▬▬▬▬▬▬▬
 # need to adjust the way we concatenate none <p> text
 
 # NYP: write a specific override for multiple authors
+
+# multiple author support for THE CITY
 
 # Need to use credentials: CRAIN'S, POLITICO PRO, WSJ, DN, bloomberg
 #   but if you close the tab before the paywall loads you can get the whole thing for DN
