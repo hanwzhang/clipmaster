@@ -8,7 +8,7 @@ import re
 # setup outlet general rules, format as follows:
 # 'site':('SHORTHAND', 'classWeWantAsText', ['blockedClass1','blockedClass2', ...])
 generalRule = {'nytimes.com':('NY TIMES','css-at9mc1 evys1bk0',[]),
-'nypost.com':('NY POST', 'single__content entry-content m-bottom', ['inline-module__heading widget-heading widget-heading--underline','social-icons__icon--comments__count','single__inline-module alignleft','comments-inline-cta__wrap','credit']),
+'nypost.com':('NY POST', 'single__content entry-content m-bottom', ['inline-module__inner','social-icons__icon--comments__count','single__inline-module alignleft','comments-inline-cta__wrap','credit']),
 'nymag.com':('NY MAGAZINE', 'article-content inline',['credit','container','text-form-wrapper']),
 'nydailynews.com':('DAILY NEWS','default__StyledText-sc-1wxyvyl-0 hnShxL body-paragraph',[]),
 'subscriber.politicopro.com':('POLITICO', 'media-article__text', []),
@@ -46,8 +46,16 @@ def get_site_info(link):
     site = link.split('https://')[-1].split('www.')[-1].split('/')[0]
     try: short = generalRule[site][0]
     except: 
-        print('Site not supported yet :( We suggest clipping by hand.')
-        exit()
+        short = site.split('.')[0].upper()
+        subjectShort = short
+        contentIdentifier = 'article'
+        bannedClass = []
+        bylinePos = ('[class*=byline]',0)
+        titleTag = 'h1'
+        bannedTag = []
+        opEd = link.find('opinion')
+        message = '▬▬▬▬▬▬▬▬▬▬Site not supported yet :( We suggest clipping by hand but heres what we can find:▬▬▬▬▬▬▬▬▬▬'
+        return short, contentIdentifier, bannedClass, bylinePos, titleTag, bannedTag, subjectShort, opEd, message
     try: subjectShort = specialSubjectShort[site]
     except: subjectShort = short
     contentIdentifier = generalRule[site][1]
@@ -58,7 +66,8 @@ def get_site_info(link):
     except: titleTag = 'h1' # default title extraction
     try: bannedTag = specialBannedTag[site]
     except: bannedTag = [] # refer to default list of tag types allowed
-    return short, contentIdentifier, bannedClass, bylinePos, titleTag, bannedTag, subjectShort
+    opEd = link.find('opinion')
+    return short, contentIdentifier, bannedClass, bylinePos, titleTag, bannedTag, subjectShort, opEd
 
 def tag_content(link, element): # testing if a line is part of the text
     generalTags = ['p','a','em','i','strong','b','span','li','h2','h3','h4']
@@ -86,13 +95,14 @@ def format_author(byLine):
         if any(y in x for y in removeWords): stringL.remove(x)
     auth = re.sub('\s+',' ',''.join(stringL))
     # end of nyp multiple authors workaround
-    for x in ['|','New York Daily News']: auth = auth.split(x)[0]
-    for x in ['By ','By','by ']: auth = auth.replace(x, '')
+    for x in ['|','New York Daily News','Updated','Published']: auth = auth.split(x)[0]
+    for x in ['By ','By','by ']: auth = auth.lstrip(x)
     return auth
 
 def generate_info(link, soup): # create formatted title & site & author & link
-    try: title = soup.find(get_site_info(link)[4]).string.split(' - ')[0].strip() #remove outlet at the end
+    try: title = soup.find(get_site_info(link)[4]).string.split(' - ')[0].strip()
     except: title = ''
+    if get_site_info(link)[7] >= 0: title = 'Opinion: ' + title
     try: auth = format_author(soup.select(get_site_info(link)[3][0])[get_site_info(link)[3][1]])
     except: auth = ''
     info = title +'\n'+ get_site_info(link)[0] +' - '+ auth +'\n'+ link
@@ -101,26 +111,22 @@ def generate_info(link, soup): # create formatted title & site & author & link
 def text_from_html(link, soup): # created formatted text
     texts = soup.findAll(text=True)
     resultText = ''
-    previous_a = False
-    previous_p = True
-    # append text
+    previous = 'para'
     for t in texts:
         if tag_content(link, t) == False: continue
-        elif t.parent.name in ('a','strong','em','i'):
-            if previous_p == True: 
-                resultText = resultText + t.string # if it's <a> after <p> (usually text with a hyperlink), do not add additional \n
-            else: resultText = resultText # cuts out <a> if it doesn't come after <p>
-            previous_a = True
-            previous_p = False
-        elif previous_a == True:
-            resultText = resultText + t.string # if it's <p> following <a> with a hyperlink, do not add extra \n
-            previous_a = False
-            previous_p = True
-        else: # if it's a new <p> (new paragraph)
-            resultText = resultText + '\n\n'+t.string
-            previous_a = False
-            previous_p = True
-    return resultText.replace('\t','')
+        elif t.parent.name in ['p', 'li','h2','h3','h4']: # this tag is a paragraph
+            if previous == 'para':
+                if any(t.string.find(x) == 0 for x in [',','.','!','?']): resultText = resultText + t.string # screen out line break issues
+                else: resultText = resultText + '\n\n'+ t.string
+            else: resultText = resultText + t.string # previous = 'inline'
+            previous = 'para'
+        else: # this tag may be inline special tags or special tags that take up a line
+            if t.parent.parent.get_text().startswith(t.parent.get_text()) == True: resultText = resultText + '\n\n'+ t.string # inline at beginning of para
+            else: resultText = resultText + t.string # inline in the middle/end of para
+            if t.parent.parent.get_text().endswith(t.parent.get_text()) == True: previous = 'para' # special tag takes up a line 
+            else: previous = 'inline' # special tag is inline
+    resultText = resultText.replace(' \n\n', ' ').replace('\n\n\n','\n\n').replace('\t','') # in case line break issues remain
+    return resultText
 
 def generate_emailSubject(link, text):
     subjectShort = get_site_info(link)[6] + ': '
@@ -133,31 +139,18 @@ url = input('Paste URL here:')
 driver = webdriver.Chrome()
 driver.get(url)
 result_soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-print(result_soup.find_all('p')[6].get_text())
-#print(result_soup.find_all('i')[3].get_text())
-#print(result_soup.find_all('i')[3].parent.get_text())
-# parent has to be p, otherwise <a> inside <i> gets a new line
-child = result_soup.find_all('i')[3].get_text()
-print('child:', child)
-parent = result_soup.find_all('i')[3].parent.get_text()
-print('parent:', parent)
-print(parent.find(child))
-
-
 text = generate_info(url, result_soup)+ text_from_html(url, result_soup)
 f = open('clip.txt', 'w', encoding="utf-8")
 f.write(generate_emailSubject(url, text) + text)
-print('▬▬▬▬▬▬▬▬▬▬▬▬DONE▬▬▬▬▬▬▬▬▬▬▬▬')
+try: print(get_site_info(url)[8])
+except: print('▬▬▬▬▬▬▬▬▬▬CLIP SUCCESSFUL!▬▬▬▬▬▬▬▬▬▬')
 
 # Issues:
-# AMNY, GG: because the text is <p><span>Text</span></p> and this affects previous_p & previous_a judgements
-# STREETSBLOG cannot remove embedded twitter
-# ***if it's just <a>,<i>,<em> inside a <p> or starting right after a <p>, there's no line break
-#   something like if text of this tag is found at index 0 of the text of parent tag
-
-# ***NYP: write a specific override for multiple authors (try with re first)
 
 # Need to use credentials: CRAIN'S, POLITICO PRO, WSJ, DN, bloomberg
 #   but if you close the tab before the paywall loads you can get the whole thing for DN
-# build opinion detector by checking if there's 'opinion' between the first & second '/'
+
+# STREETSBLOG cannot remove embedded twitter
+# opinion detector does not support NYP, becuz they don't differentiate it in the link
+# needs chrome
+# a better way to add/edit site-specific parameters, maybe an excel
