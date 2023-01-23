@@ -4,43 +4,19 @@ from bs4.element import Comment
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import re
-
-# setup outlet general rules, format as follows:
-# 'site':('SHORTHAND', 'classWeWantAsText', ['blockedClass1','blockedClass2', ...])
-generalRule = {'nytimes.com':('NY TIMES','css-53u6y8',['css-79elbk']),
-'nypost.com':('NY POST', 'single__content entry-content m-bottom', ['inline-slideshow','inline-module__inner','social-icons__icon--comments__count','single__inline-module alignleft','comments-inline-cta__wrap','credit']),
-'nymag.com':('NY MAGAZINE', 'article-content inline',['credit','container','text-form-wrapper']),
-'nydailynews.com':('DAILY NEWS','default__ArticleBody-sc-1wxyvyl-2 hEvcgL article-body-wrapper-custom',['ts-share-bar','ad_wrapper','figContainer']),
-'subscriber.politicopro.com':('POLITICO', 'media-article__text', []),
-'wsj.com':('WSJ','css-xbvutc-Paragraph e3t0jlg0',[]),
-'bloomberg.com':('BLOOMBERG','body-content',[]),
-'washingtonpost.com':('WAPO', 'wpds-c-cYdRxM wpds-c-cYdRxM-iPJLV-css font-copy', ['font--article-body font-copy hide-for-print ma-0 pb-md db italic interstitial']),
-'gothamist.com':('GOTHAMIST','streamfield-paragraph rte-text mb-5',[]),
-'silive.com':('SI ADVANCE','entry-content',[]),
-'thecity.nyc':('THE CITY','RichTextArticleBody RichTextBody',['HTLAds-with-background','Form-newsletter-breaker-wrapper']),
-'amny.com':('AMNY','article-content',['syndicated-embedded-player','promo-oneliner newsletter','image-credit']),
-'crainsnewyork.com':("CRAIN'S NY",'field--name-field-paragraph-body',[]),
-'gothamgazette.com':('GOTHAM GAZETTE','art-article',[]),
-'hellgatenyc.com':('HELL GATE','PostContent_wrapper__5uSJk',[]),
-'citylimits.org':('CITY LIMITS','elementor-element elementor-element-670ff5a2 post-content elementor-widget elementor-widget-theme-post-content',['hatley-campaign Campaign CampaignType--inline','wp-media-credit']),
-'ny.chalkbeat.org':('CHALKBEAT','RichTextArticleBody RichTextBody',['Page-articleBody-TagData','GoogleDfpAd-background is_filled']),
-'nyc.streetsblog.org':('STREETSBLOG','entry-content',['wp-caption-text','css-1dbjc4n r-13awgt0 r-12vffkv','share-bottom']),
-'cityandstateny.com':('CITY AND STATE','js-content',['advert-tag-text']),
-'foxnews.com':('FOX','article-body',['close','video-container','caption'])}
-
-specialSubjectShort = {'nytimes.com':'NYT',
-'nypost.com':'NYP',
-'nydailynews.com':'DN',
-'nymag.com':'NY MAG'}
-specialBylinePos = {'nypost.com':('[class*=byline]',0),
-'gothamist.com':('[class*=byline]',1),
-'thecity.nyc':('[class*=AuthorByline-InPage]',0),
-'nytimes.com':('[class*=e1jsehar1]',0),
-'gothamgazette.com':('[class*=art-postauthoricon]',0),
-'citylimits.org':('[class*=fn]',0)}
-specialTitleTag = {'citylimits.org':'title',
-'gothamgazette.com':'title'}
-specialBannedTag = {'foxnews.com':['strong']}
+import pandas as pd
+# dictionaries - rules for text extraction
+Rules = pd.ExcelFile('site_configurations.xlsx')
+generalRule = pd.read_excel(Rules, sheet_name='generalRule',index_col = 0).fillna('').to_dict(orient = 'index')
+specialSubjectShort = pd.read_excel(Rules, sheet_name='specialSubjectShort',index_col = 0).fillna('').to_dict(orient = 'index')
+specialBylinePos = pd.read_excel(Rules, sheet_name='specialBylinePos',index_col = 0).fillna('').to_dict(orient = 'index')
+specialTitleTag = pd.read_excel(Rules, sheet_name='specialTitleTag',index_col = 0).fillna('').to_dict(orient = 'index')
+specialBannedTag = pd.read_excel(Rules, sheet_name='specialBannedTag',index_col = 0).fillna('').to_dict(orient = 'index')
+for x in generalRule.keys(): generalRule[x] = (generalRule[x][0], generalRule[x][1], str(generalRule[x][2]).split(',')) # may need to strip spaces at beginning at end in case someone adds it
+for x in specialBylinePos: specialBylinePos[x] = (specialBylinePos[x][0], specialBylinePos[x][1])
+for x in [specialSubjectShort,specialTitleTag]:
+    for y in x.keys(): x[y] = x[y][0]
+for x in specialBannedTag: specialBannedTag[x] = str(specialBannedTag[x][0]).split(',')
 
 def get_site_info(link):
     site = link.split('https://')[-1].split('www.')[-1].split('/')[0]
@@ -94,6 +70,7 @@ def format_author(byLine):
     for x in stringL: 
         if any(y in x for y in removeWords): stringL.remove(x)
     auth = re.sub('\s+',' ',''.join(stringL))
+    auth = re.sub(' \S*@\S*','', auth)
     # end of nyp multiple authors workaround
     for x in ['|','New York Daily News','Updated','Published', 'Police']: auth = auth.split(x)[0]
     for y in ['By ','By','by ']:
@@ -148,14 +125,13 @@ except: print('▬▬▬▬▬▬▬▬▬▬CLIP SUCCESSFUL!▬▬▬▬▬▬�
 
 # Issues:
 
-# DN h3s
-# maybe add to a list things that you want, instead of just one thing
-
 # Need to use credentials: CRAIN'S, POLITICO PRO, WSJ, DN, bloomberg
 #   but if you close the tab before the paywall loads you can get the whole thing for DN
 
-# STREETSBLOG cannot remove embedded twitter
+# STREETSBLOG cannot remove embedded twitter - but now it's an independent paragraph
 # opinion detector does not support NYP, becuz they don't differentiate it in the link
 
 # needs chrome
-# a better way to add/edit site-specific parameters, maybe an excel
+# not sure if reading an excel every time is the best idea, because it slows the program down
+
+# cut off next article for City and state; cut off "additional news / related coverage" for si advance
