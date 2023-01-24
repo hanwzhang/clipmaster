@@ -9,7 +9,7 @@ Clipmaster is a developing project so it needs your contributions to support mor
 
 1. Make sure google chrome is installed
 2. Get the link of the article
-
+3. Run 'clipmaster.exe' and paste url into the window
 
 ## Configuring extraction for sites
 
