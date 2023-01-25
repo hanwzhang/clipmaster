@@ -2,7 +2,6 @@
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 import re
 import pandas as pd
 # dictionaries - rules for text extraction
@@ -67,7 +66,7 @@ def format_author(byLine):
     auth = byLine.get_text().strip()
     # nyp multiple authors workaround
     stringL = auth.split('\n')
-    removeWords = ['Social Links','Author','author','required','Submit','Δ']
+    removeWords = ['Social Links','Author','author','required','Submit','Δ','follow']
     for x in stringL: 
         if any(y in x for y in removeWords): stringL.remove(x)
     auth = re.sub('\s+',' ',''.join(stringL))
@@ -104,7 +103,10 @@ def text_from_html(link, soup): # created formatted text
             else: resultText = resultText + t.string # inline in the middle/end of para
             if t.parent.parent.get_text().endswith(t.parent.get_text()) == True: previous = 'para' # special tag takes up a line 
             else: previous = 'inline' # special tag is inline
-    resultText = re.sub('[A-Za-z] \n\n', ' ',resultText).replace('\n\n\n','\n\n').replace('\t','') # in case line break issues remain
+    #resultText = re.sub('[A-Za-z] \n\n', ' ',resultText).replace('\n\n\n','\n\n').replace('\t','') # in case line break issues remain
+    resultText = re.sub('\n\n\n*', '\n\n', re.sub('[A-Za-z] \n\n', ' ',resultText)).replace('\t','') # in case line break issues remain
+    if get_site_info(link)[0] == 'SI ADVANCE': # SI ADVANCE remove related content
+        for x in ['\n\nADDITIONAL','\n\nMORE','\n\nRELATED']: resultText = resultText.split(x)[0]
     return resultText
 
 def generate_emailSubject(link, text):
@@ -115,24 +117,25 @@ def generate_emailSubject(link, text):
     return subject
 
 url = input('Paste URL here:')
-driver = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument('user-data-dir=C:/Users/HaZhang/Desktop/clipmaster-main/Clipperprofile') 
+driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
 driver.get(url)
 result_soup = BeautifulSoup(driver.page_source, 'html.parser')
+#driver.close()
 text = generate_info(url, result_soup) + text_from_html(url, result_soup)
-f = open('clip.txt', 'w', encoding="utf-8")
-f.write(generate_emailSubject(url, text) + text)
+print('▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬CLIP STARTS HERE▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n')
+print(generate_emailSubject(url, text) + text)
 try: print(get_site_info(url)[8])
-except: print('▬▬▬▬▬▬▬▬▬▬CLIP SUCCESSFUL!▬▬▬▬▬▬▬▬▬▬')
+except: print('\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬CLIP SUCCESSFUL!▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬')
 
 # Issues:
-
-# Need to use credentials: CRAIN'S, POLITICO PRO, WSJ, DN, bloomberg
-#   but if you close the tab before the paywall loads you can get the whole thing for DN
 
 # STREETSBLOG cannot remove embedded twitter - but now it's an independent paragraph
 # opinion detector does not support NYP, becuz they don't differentiate it in the link
 
-# needs chrome
-# not sure if reading an excel every time is the best idea, because it slows the program down
+# When running inside a code editor like MS visual code, writing the clip to a txt is cleaner:
+#f = open('clip.txt', 'w', encoding="utf-8")
+#f.write(generate_emailSubject(url, text) + text)
 
-# cut off next article for City and state; cut off "additional news / related coverage" for si advance
+# NYT opinion author's bio is not included because it's separated from main text by 'follow us on twitter' messages
