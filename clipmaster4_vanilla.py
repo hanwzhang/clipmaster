@@ -1,4 +1,5 @@
 # libraries
+print('Welcome. Loading...')
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 from selenium import webdriver
@@ -120,9 +121,9 @@ def generate_emailSubject(link, text):
     return subject
 
 cont = True
-#clipperprofile = 'user-data-dir=' + os.path.abspath('Clipper')
+clipperprofile = 'user-data-dir=' + os.path.abspath('Clipper')
 options = webdriver.ChromeOptions()
-#options.add_argument(clipperprofile)
+options.add_argument(clipperprofile)
 options.add_argument("--window-size=720,1080")
 while cont == True:
     url = input('Paste URL here:')

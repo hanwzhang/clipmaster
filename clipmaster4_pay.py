@@ -1,4 +1,5 @@
 # libraries
+print('Welcome. Loading...')
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 from selenium import webdriver
