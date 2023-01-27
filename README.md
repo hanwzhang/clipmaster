@@ -72,12 +72,12 @@ Let's demo:
     
 1. Simplify - copy clip to clipboard?
 2. Improve format accuracy - using the excel, or someone with python knowledge
-
    * STREETSBLOG cannot remove embedded twitter - but now it's an independent paragraph
    * opinion detector does not support NYP, becuz they don't differentiate it in the link
    * NYT opinion author's bio is not included because it's separated from main text by 'follow us on twitter' messages
    * Someone with okay python knowledge can improve author extraction accuracy, and resolve line breaks
    * Bloomberg somehow knows it's a bot but seems to be the only one...
-3. Coding knowledge involved to improve browser automation & text extraction:
+3. First clip after starting up is very slow (~2 mins). Every clip after usually takes 5-20 seconds.
+4. Coding knowledge involved to improve browser automation & text extraction:
    * HTML: know the basic structure of html docs
    * Python: html parsing with BeautifulSoup; browser automation with Selenium, or other packages
