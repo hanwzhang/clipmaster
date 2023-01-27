@@ -7,7 +7,6 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import re
 import pandas as pd
-import os
 # dictionaries - rules for text extraction
 Rules = pd.ExcelFile('site_configurations.xlsx')
 generalRule = pd.read_excel(Rules, sheet_name='generalRule',index_col = 0).fillna('').to_dict(orient = 'index')
@@ -79,6 +78,7 @@ def format_author(link,byLine):
     for x in ['|','New York Daily News','Updated','Published', 'Police']: auth = auth.split(x)[0]
     for y in ['By ','By','by ',': ']:
         if auth.startswith(y) == True: auth = auth.replace(y, '', 1)
+    auth = auth.strip()
     return auth
 
 def generate_info(link, soup): # create formatted title & site & author & link
@@ -123,8 +123,6 @@ def generate_emailSubject(link, text):
 cont = True
 options = webdriver.ChromeOptions()
 options.add_argument("--window-size=720,1080")
-#clipperprofile = 'user-data-dir=' + os.path.abspath('Clipper')
-#options.add_argument(clipperprofile)
 while cont == True:
     url = input('Paste URL here:')
     #driver = webdriver.Chrome("chromedriver.exe", options=options)
@@ -142,10 +140,10 @@ while cont == True:
     except:
         driver.close() 
         print('Error: Link format not recognized')
-    contmsg = input('Keep clipping? y/n')
-    if contmsg == 'y':
-        cont = True
-    else: cont = False
+    contmsg = input('Press Enter to keep clipping; Type "quit" + Enter to quit.')
+    if contmsg == 'quit':
+        cont = False
+    else: cont = True
 print('Thank you for using Clipmaster.')
 
 # Issues:

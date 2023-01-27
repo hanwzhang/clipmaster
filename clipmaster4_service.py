@@ -79,6 +79,7 @@ def format_author(link,byLine):
     for x in ['|','New York Daily News','Updated','Published', 'Police']: auth = auth.split(x)[0]
     for y in ['By ','By','by ',': ']:
         if auth.startswith(y) == True: auth = auth.replace(y, '', 1)
+    auth = auth.strip()
     return auth
 
 def generate_info(link, soup): # create formatted title & site & author & link
@@ -142,10 +143,10 @@ while cont == True:
     except:
         driver.close() 
         print('Error: Link format not recognized')
-    contmsg = input('Keep clipping? y/n')
-    if contmsg == 'y':
-        cont = True
-    else: cont = False
+    contmsg = input('Press Enter to keep clipping; Type "quit" + Enter to quit.')
+    if contmsg == 'quit':
+        cont = False
+    else: cont = True
 print('Thank you for using Clipmaster.')
 
 # Issues:
