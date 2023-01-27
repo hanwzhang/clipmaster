@@ -121,18 +121,19 @@ def generate_emailSubject(link, text):
 
 clipperprofile = open('clipperprofile.txt','r').read().replace('\\','/')
 clipperprofile = '--user-data-dir=' + clipperprofile[0:clipperprofile.find('User Data')+9]
-print('Edge profile location: '+ clipperprofile)
+print('Your Edge profile location: '+ clipperprofile)
 options = Options()
 options.add_argument(clipperprofile)
 options.add_argument("--window-size=720,1080")
 options.add_argument('--headless')
+options.add_argument('--log-level=3')
 cont = True
 while cont == True:
     url = input('Paste URL here:')
     driver = webdriver.Edge(options = options)
     try:
-        driver.get(url)
         print('\nLoading clip......\n')
+        driver.get(url)
         result_soup = BeautifulSoup(driver.page_source, 'html.parser')
         driver.close()
         text = generate_info(url, result_soup) + text_from_html(url, result_soup)
