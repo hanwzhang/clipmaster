@@ -119,19 +119,17 @@ def generate_emailSubject(link, text):
     else: subject = subjectShort + '[MEA] ' + title
     return subject
 
-cont = True
-
-clipperprofile = '--user-data-dir=C:/Users/HaZhang/AppData/Local/Microsoft/Edge/User Data'
+clipperprofile = open('clipperprofile.txt','r').read().replace('\\','/')
+clipperprofile = '--user-data-dir=' + clipperprofile[0:clipperprofile.find('User Data')+9]
+print('Edge profile location: '+ clipperprofile)
 options = Options()
 options.add_argument(clipperprofile)
 options.add_argument("--window-size=720,1080")
 options.add_argument('--headless')
-
+cont = True
 while cont == True:
     url = input('Paste URL here:')
-    #driver = webdriver.Chrome("chromedriver.exe", options=options)
     driver = webdriver.Edge(options = options)
-
     try:
         driver.get(url)
         print('\nLoading clip......\n')
@@ -145,7 +143,7 @@ while cont == True:
     except:
         driver.close() 
         print('Error: Link format not recognized')
-    contmsg = input('Press Enter to keep clipping; Type "quit" + Enter to quit.')
+    contmsg = input('Press Enter to keep clipping; "quit" + Enter to quit.')
     if contmsg == 'quit':
         cont = False
     else: cont = True
@@ -154,7 +152,6 @@ print('Thank you for using Clipmaster.')
 # Issues:
 
 # STREETSBLOG cannot remove embedded twitter - but now it's an independent paragraph
-
 # opinion detector does not support NYP, becuz they don't differentiate it in the link
-
 # NYT opinion author's bio is not included because it's separated from main text by 'follow us on twitter' messages
+# bloomberg somehow knows I'm a bot but it seems to be the only one...
