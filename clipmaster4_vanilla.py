@@ -121,10 +121,10 @@ def generate_emailSubject(link, text):
     return subject
 
 cont = True
-clipperprofile = 'user-data-dir=' + os.path.abspath('Clipper')
 options = webdriver.ChromeOptions()
-options.add_argument(clipperprofile)
 options.add_argument("--window-size=720,1080")
+#clipperprofile = 'user-data-dir=' + os.path.abspath('Clipper')
+#options.add_argument(clipperprofile)
 while cont == True:
     url = input('Paste URL here:')
     #driver = webdriver.Chrome("chromedriver.exe", options=options)
