@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.edge.options import Options
 import re
 import pandas as pd
+import pyperclip
 # dictionaries - rules for text extraction
 Rules = pd.ExcelFile('site_configurations.xlsx')
 generalRule = pd.read_excel(Rules, sheet_name='generalRule',index_col = 0).fillna('').to_dict(orient = 'index')
@@ -43,7 +44,8 @@ def get_site_info(link):
     except: titleTag = 'h1' # default title extraction
     try: bannedTag = specialBannedTag[site]
     except: bannedTag = [] # refer to default list of tag types allowed
-    opEd = link.find('opinion')
+    if any(x in link for x in ['opinion','oped','op-ed']): opEd = 1
+    else: opEd = -1
     return short, contentIdentifier, bannedClass, bylinePos, titleTag, bannedTag, subjectShort, opEd
 
 def tag_content(link, element): # testing if a line is part of the text
@@ -66,7 +68,7 @@ def tag_content(link, element): # testing if a line is part of the text
 
 def format_author(link,byLine):
     auth = byLine.get_text().strip()
-    if get_site_info(link)[0] == 'POLITICO': auth = re.sub('\s+',' ',re.sub(' Close.*?\n.*?bio page', '', auth)).replace(' ,',',') # political multiple authors workaround
+    if get_site_info(link)[0] == 'POLITICO': auth = re.sub('\s+',' ',re.sub(' Close.*?\n.*?bio page', '', auth)).replace(' ,',',') # Politico multiple authors workaround
     if get_site_info(link)[0] == 'NY POST': # nyp multiple authors workaround
         stringL = auth.split('\n')
         removeWords = ['Social Links','Author','author','required','Submit','Δ','follow']
@@ -106,7 +108,6 @@ def text_from_html(link, soup): # created formatted text
             else: resultText = resultText + t.string # inline in the middle/end of para
             if t.parent.parent.get_text().endswith(t.parent.get_text()) == True: previous = 'para' # special tag takes up a line 
             else: previous = 'inline' # special tag is inline
-    #resultText = re.sub('[A-Za-z] \n\n', ' ',resultText).replace('\n\n\n','\n\n').replace('\t','') # in case line break issues remain
     resultText = re.sub('\n\n\n*', '\n\n', re.sub('[A-Za-z] \n\n', ' ',resultText)).replace('\t','') # in case line break issues remain
     if get_site_info(link)[0] == 'SI ADVANCE': # SI ADVANCE remove related content
         for x in ['\n\nADDITIONAL','\n\nMORE','\n\nRELATED']: resultText = resultText.split(x)[0]
@@ -139,8 +140,9 @@ while cont == True:
         text = generate_info(url, result_soup) + text_from_html(url, result_soup)
         print('▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬CLIP STARTS HERE▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n')
         print(generate_emailSubject(url, text) + text)
+        pyperclip.copy(generate_emailSubject(url, text) + text)
         try: print(get_site_info(url)[8])
-        except: print('\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬CLIP SUCCESSFUL!▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬')
+        except: print('\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬CLIP COPIED TO CLIPBOARD▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬')
     except:
         driver.close() 
         print('Error: Link format not recognized')
