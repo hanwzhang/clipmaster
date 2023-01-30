@@ -28,7 +28,7 @@ Supports all the priority outlets on [our media monitoring sheet](https://docs.g
 
 ## Clipping an article
 
-Click <span style="color:cyan">'clipmaster5.exe'</span>; When prompted paste article link into the window and hit Enter; Wait for the clip to load.
+Click <span style="color:cyan">'clipmaster.exe'</span>; When prompted paste article link into the window and hit Enter; Wait for the clip to load.
 
 Let's demo:
 
