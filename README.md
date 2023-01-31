@@ -6,9 +6,9 @@ Clipmaster scrapes and formats the title, outlet, author and text content of a n
 Clipmaster is a developing project so it needs your contributions to support more sites and clip more accurately. Configuration is easy - no previous coding experience required.
 
 # Features
-Supports all the priority outlets on [our media monitoring sheet](https://docs.google.com/spreadsheets/d/18mKdQzu_WDidZIYGT-Ga2HxpudCyLBTFIYQvnVMYt8E/edit#gid=0) except for <b>Bloomberg (detects bot activity very well)</b>, and other sites put into the 'site_configurations.xlsx' sheet.
+Supports all the priority outlets on [our media monitoring sheet](https://docs.google.com/spreadsheets/d/18mKdQzu_WDidZIYGT-Ga2HxpudCyLBTFIYQvnVMYt8E/edit#gid=0) except for <i>Bloomberg (detects bot activity very well)</i>, and other sites put into the 'site_configurations.xlsx' sheet.
 
-* Extracts the desired text content; <b>blocks ads, subscription messages, and media</b>
+* Extracts the desired text content; <b>blocks ads, subscription messages, and multi-media</b>
 * Extracts title, author, outlet
 * <b>Automatically formats the info for distribution</b>
   * Formats outlet into shorthands
@@ -16,7 +16,7 @@ Supports all the priority outlets on [our media monitoring sheet](https://docs.g
   * Detects "Adams" => generates [MEA] label
   * Detects "opinion / op-ed" in link or title => generates "Opinion:" before title
 * <b>Copies the formatted clip to clipboard</b>
-* Possible to <b style="color:red">configure and add new sites with html knowledge</b> - no coding required
+* Possible to <i>configure and add new sites with html knowledge</i> - no coding required
 
 # How to Use
 
@@ -24,13 +24,13 @@ Supports all the priority outlets on [our media monitoring sheet](https://docs.g
 
 1. Download clipmaster.zip and unzip the file.
 2. Make sure Microsoft Edge is installed and you're logged in to the paywall-ed websites on Edge.
-3. Open a new tab in Edge and go to <span style="color:cyan">'edge://version'</span>. Copy your 'Profile Path'. 
-4. Find <span style="color:cyan">'clipperprofile.txt'</span> in Clipmaster's folder, replace the text in there with your profile path and save.
+3. Open a new tab in Edge and go to <i>'edge://version'</i>. Copy your 'Profile Path'. 
+4. Find <i>'clipperprofile.txt'</i> in Clipmaster's folder, replace the text in there with your profile path and save.
 5. Close Edge completely and <b style="color:red">use ANOTHER browser to monitor news.</b> This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
 
 ## Clipping an article
 
-Click <span style="color:cyan">'clipmaster.exe'</span>; When prompted paste article link into the window and hit Enter; Wait for the clip to load.
+Click <i>'clipmaster.exe'</i>; When prompted paste article link into the window and hit Enter; Wait for the clip to load.
 
 Let's demo:
 
@@ -46,11 +46,11 @@ Let's demo:
 
 ## Set up extraction for a site
 
-1. Open <span style="color:cyan">'site_configurations.xlsx'</span>. You will see five sheets. Usually for outlet and text extraction to work for a site you must fill in the rules in the 'generalRules' sheet.
+1. Open <i>'site_configurations.xlsx'</i>. You will see five sheets. Usually for outlet and text extraction to work for a site you must fill in the rules in the 'generalRules' sheet.
 2. In the first column add the host name of the outlet's website, which is usually what comes after "https://" and ends at ".com", '.org", etc. For example: "nytimes.com"
 3. Open an article, highlight some of the text that you want to extract. Right click and select inspect. 
    
-    <b style="color:red">[Users with prior HTML knowledge can skip to the next point]</b> In the inspection panel you'll see your desired text under an element which may look like any of these:
+    <i>[Users with prior HTML knowledge can skip to the next point]</i> In the inspection panel you'll see your desired text under an element which may look like any of these:
 
     ````
     <h1>Your title</h1>
