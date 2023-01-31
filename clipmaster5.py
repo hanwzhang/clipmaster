@@ -76,10 +76,11 @@ def format_author(link,byLine):
             if any(y in x for y in removeWords): stringL.remove(x)
         auth = re.sub('\s+',' ',''.join(stringL))
         auth = re.sub(' \S*@\S*','', auth) # end of nyp multiple authors workaround
-    for x in ['|','New York Daily News','Updated','Published', 'Police']: auth = auth.split(x)[0]
-    for y in ['By ','By','by ',': ']:
+    for x in ['|','New York Daily News','Updated','Published', 'Police', 'Intelligencer']: auth = auth.split(x)[0] # drop author descriptions
+    for y in ['By ','By','by ',': ']: # drop 'By' at the beginning
         if auth.startswith(y) == True: auth = auth.replace(y, '', 1)
     auth = auth.strip()
+    if auth.endswith(',') == True: auth = auth[:-1] # drop extra comma
     return auth
 
 def generate_info(link, soup): # create formatted title & site & author & link
