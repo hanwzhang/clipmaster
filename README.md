@@ -14,17 +14,19 @@ Supports all the priority outlets on [our media monitoring sheet](https://docs.g
   * Formats outlet into shorthands
   * Generates email headline
   * Detects "Adams" => generates [MEA] label
-  * Detects "opinion" in link or title => generates "Opinion:" before title
+  * Detects "opinion / op-ed" in link or title => generates "Opinion:" before title
+* <b>Copies the formatted clip to clipboard</b>
 * Possible to <b style="color:red">configure and add new sites with html knowledge</b> - no coding required
 
 # How to Use
 
 ## Prerequisites
 
-1. Make sure Microsoft Edge is installed and you're logged in to the paywall-ed websites on Edge.
-2. Open a new tab in Edge and go to <span style="color:cyan">'edge://version'</span>. Copy your 'Profile Path'. 
-3. Find <span style="color:cyan">'clipperprofile.txt'</span> in Clipmaster's folder, replace the text in there with your profile path and save.
-4. Close Edge completely and <b style="color:red">use ANOTHER browser to monitor news.</b> This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
+1. Download clipmaster.zip and unzip the file.
+2. Make sure Microsoft Edge is installed and you're logged in to the paywall-ed websites on Edge.
+3. Open a new tab in Edge and go to <span style="color:cyan">'edge://version'</span>. Copy your 'Profile Path'. 
+4. Find <span style="color:cyan">'clipperprofile.txt'</span> in Clipmaster's folder, replace the text in there with your profile path and save.
+5. Close Edge completely and <b style="color:red">use ANOTHER browser to monitor news.</b> This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
 
 ## Clipping an article
 
