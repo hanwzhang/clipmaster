@@ -30,7 +30,7 @@ Supports all the priority outlets on [our media monitoring sheet](https://docs.g
 
 ## Clipping an article
 
-Click <i>'clipmaster.exe'</i>; When prompted paste article link into the window and hit Enter; Wait for the clip to load.
+Click <i>'clipmaster.exe'</i>; When prompted paste article link into the window and hit Enter; Wait for the clip to load. The first clip can take up to 2 mins, and error messages are normal; Each clip after that takes about 10-15 seconds.
 
 Let's demo:
 
