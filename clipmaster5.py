@@ -79,7 +79,7 @@ def format_author(link,byLine):
     for x in ['|','New York Daily News','Updated','Published', 'Police', 'Intelligencer']: auth = auth.split(x)[0] # drop author descriptions
     for y in ['By ','By','by ',': ']: # drop 'By' at the beginning
         if auth.startswith(y) == True: auth = auth.replace(y, '', 1)
-    auth = auth.strip()
+    auth = auth.replace('\n','')
     if auth.endswith(',') == True: auth = auth[:-1] # drop extra comma
     return auth
 
