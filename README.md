@@ -20,6 +20,8 @@ Supports all the outlets put into its ***'site_configurations.xlsx'*** except fo
 
 # How to Use
 
+## Installation
+
 1. [Download](https://drive.google.com/file/d/1VNW1G4KeiD8Fhhi1yaxTQHQ8x9Z_4wAo/view?usp=share_link) ***'clipmaster.zip'*** and unzip the file.
 2. Make sure Microsoft Edge is installed and you're logged in to the paywall-ed websites on Edge.
 3. Open a new tab in Edge and go to ***'edge://version'***. Copy your 'Profile Path'.
@@ -74,3 +76,9 @@ Wait for the clip to load. The first clip can take up to 2 mins, and error messa
 
    <img src="/images/exclude.png" width="70%">
    <img src="/images/excludecell.png" width="70%">
+
+5. The other sheets are optional and they improve extraction accuracy for other parts of the article:
+   * *specialSubjectShort*: define a shorthand for the subject line if you want it to be different from the shorthand before the author. E.g. NYT vs. NY TIMES.
+   * *specialBylinePos*: define how to locate the article's byline (class name; which among all the elements with that class name to choose, 0 means the first one)
+   * *specialTitleTag*: define tag type of the article's title, it's \<h1> by default
+   * *specialBannedTag*: ban one or more (connect with comma) types of tag for an outlet. For example, if an outlet uses and only uses bold text for "Also Read" messages, ban \<b> or \<strong> here.
