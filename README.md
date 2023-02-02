@@ -35,7 +35,7 @@ Wait for the clip to load. The first clip can take up to 2 mins, and error messa
 ## Set up extraction for a site
 
 1. Open <i>'site_configurations.xlsx'</i>. You will see five sheets. Usually for outlet and text extraction to work for a site you must fill in the rules in the 'generalRules' sheet.
-2. In the first column add the host name of the outlet's website, which is usually what comes after "https://" and ends at ".com", '.org", etc. For example: "nytimes.com". Fill the abbreviated shorthand you want for the site in the 2nd column (0).
+2. In the first column add the host name of the outlet's website, which is usually what comes after "https://" and ends at ".com", '.org", etc. For example: "nytimes.com". Fill the abbreviated shorthand you want for the site in the 2nd column (0). <img src="/images/siteconfig.png" width="70%">
 3. Open an article, highlight some of the text that you want to extract. Right click and select inspect. 
    
     <i>[Users with prior HTML knowledge can skip to the next point]</i> In the inspection panel you'll see your desired text under an element which may look like any of these:
@@ -54,6 +54,6 @@ Wait for the clip to load. The first clip can take up to 2 mins, and error messa
    * it or any of its parent elements has the 'identifier' class defined for this outlet;
    * neither it or any of its parent elements has any of the 'banned' classes defined for this outlet.
    
-   So we need to find a class shared only by all the desired text, or a class shared by all the desired plus some unwanted text, and fill it in the 3rd column (1). 
+   So we need to find a class shared only by all the desired text, or a class shared by all the desired plus some unwanted text, and fill it in the 3rd column (1). <img src="/images/include.png" width="70%">
 
-    Then, find the classes of the elements (or classes of their parents) that need to be excluded. Fill them in the 4th column (2) and separate them by a comma ",". DO NOT ADD EXTRA SPACE AFTER THE COMMA.
+   Then, find the classes of the elements (or classes of their parents) that need to be excluded. Fill them in the 4th column (2) and separate them by a comma ",". DO NOT ADD EXTRA SPACE AFTER THE COMMA. <img src="/images/exclude.png" width="70%">
