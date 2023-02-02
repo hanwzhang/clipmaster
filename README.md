@@ -4,7 +4,7 @@
 <div style="float: left; width: 60%;">
   <img src="/images/cover.png" width="60%">
 </div>
-<div tyle="float: right; width: 40%;">
+<div style="float: right; width: 40%;">
   <p>Clipmaster scrapes and formats the title, outlet, author and text content of a news article when given its url. It is a developing project so it needs your contributions to support more sites and clip more accurately. Configuration is easy - no previous coding experience required.</p>
 </div>
 
