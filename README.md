@@ -1,5 +1,5 @@
 # Welcome to Clipmaster!
-***Last update: 2023.1.27 V.5***
+***Last update: 2023.2.2 V.5***
 
 Clipmaster scrapes and formats the title, outlet, author and text content of a news article when given its url. 
 
