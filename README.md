@@ -79,6 +79,6 @@ Wait for the clip to load. The first clip can take up to 2 mins, and error messa
 
 5. The other sheets are optional and they improve extraction accuracy for other parts of the article:
    * *specialSubjectShort*: define a shorthand for the subject line if you want it to be different from the shorthand before the author. E.g. NYT vs. NY TIMES.
-   * *specialBylinePos*: define how to locate the article's byline (class name; which among all the elements with that class name to choose, 0 means the first one)
+   * *specialBylinePos*: define how to locate the article's byline using 1. class name; 2. which among all the elements with that class name to choose (0 means the first one)
    * *specialTitleTag*: define tag type of the article's title, it's \<h1> by default
    * *specialBannedTag*: ban one or more (connect with comma) types of tag for an outlet. For example, if an outlet uses and only uses bold text for "Also Read" messages, ban \<b> or \<strong> here.
