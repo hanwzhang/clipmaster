@@ -32,18 +32,6 @@ Click <i>'clipmaster.exe'</i>; When prompted paste article link into the window 
 
 Wait for the clip to load. The first clip can take up to 2 mins, and error messages are normal; Each clip after that takes about 10-15 seconds.<img src="/images/clipped.png" width="70%">
 
-Let's demo:
-
-* GOTHAMIST [https://gothamist.com/news/nyc-mayor-dishes-on-gas-stoves-and-says-hes-a-fan-as-governor-considers-statewide-ban](https://gothamist.com/news/nyc-mayor-dishes-on-gas-stoves-and-says-hes-a-fan-as-governor-considers-statewide-ban)
-
-* NY TIMES [https://www.nytimes.com/2023/01/25/nyregion/composting-garbage-nyc.html?searchResultPosition=2](https://www.nytimes.com/2023/01/25/nyregion/composting-garbage-nyc.html?searchResultPosition=2)
-
-* Paywalled examples: NY DAILY NEWWS [https://www.nydailynews.com/new-york/nyc-crime/ny-nypd-commander-ousted-from-his-precinct-being-promoted-20230124-edcpsyew6bgujpfksftn6az4eq-story.html](https://www.nydailynews.com/new-york/nyc-crime/ny-nypd-commander-ousted-from-his-precinct-being-promoted-20230124-edcpsyew6bgujpfksftn6az4eq-story.html)
-
-* WSJ [https://www.wsj.com/articles/a-charter-school-test-for-eric-adams-new-york-teachers-union-standards-discipline-education-students-11674408280?mod=Searchresults_pos2&page=1](https://www.wsj.com/articles/a-charter-school-test-for-eric-adams-new-york-teachers-union-standards-discipline-education-students-11674408280?mod=Searchresults_pos2&page=1)
-
-* Not supported site example: ASTORIA POST [https://astoriapost.com/city-council-rejects-rezoning-application-for-auto-dealership-on-northern-boulevard](https://astoriapost.com/city-council-rejects-rezoning-application-for-auto-dealership-on-northern-boulevard)
-
 ## Set up extraction for a site
 
 1. Open <i>'site_configurations.xlsx'</i>. You will see five sheets. Usually for outlet and text extraction to work for a site you must fill in the rules in the 'generalRules' sheet.
