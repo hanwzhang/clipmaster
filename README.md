@@ -1,11 +1,7 @@
 # Welcome to Clipmaster!
 ***Last update: 2023.2.2 V.5***
 
-<img src="/images/cover.png" width="100%">
-
-Clipmaster scrapes and formats the title, outlet, author and text content of a news article when given its url. 
-
-Clipmaster is a developing project so it needs your contributions to support more sites and clip more accurately. Configuration is easy - no previous coding experience required.
+<img src="/images/cover.png" width="50%"> Clipmaster scrapes and formats the title, outlet, author and text content of a news article when given its url. It is a developing project so it needs your contributions to support more sites and clip more accurately. Configuration is easy - no previous coding experience required.
 
 # Features
 Supports all the outlets put into its ***'site_configurations.xlsx'*** except for *Bloomberg (detects bot activity very well)*.
