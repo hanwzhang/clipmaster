@@ -6,7 +6,7 @@ Clipmaster scrapes and formats the title, outlet, author and text content of a n
 Clipmaster is a developing project so it needs your contributions to support more sites and clip more accurately. Configuration is easy - no previous coding experience required.
 
 # Features
-Supports all the outlets put into its ::'site_configurations.xlsx':: except for <i>Bloomberg (detects bot activity very well)</i>.
+Supports all the outlets put into its __'site_configurations.xlsx'__ except for <i>Bloomberg (detects bot activity very well)</i>.
 
 * Extracts the desired text content; <b>blocks ads, subscription messages, and multi-media</b>
 * Extracts title, author, outlet
