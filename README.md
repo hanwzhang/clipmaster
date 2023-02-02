@@ -45,7 +45,7 @@ Wait for the clip to load. The first clip can take up to 2 mins, and error messa
 ## Set up extraction for a site
 
 1. Open ***'site_configurations.xlsx'***. You will see five sheets. Usually for outlet and text extraction to work for a site you must fill in the rules in the 'generalRules' sheet.
-2. In the first column add the host name of the outlet's website, which is usually what comes between "https://" and the first "/", aka ending with ".com", '.org", etc. For example: "nytimes.com". Fill the abbreviated shorthand you want for the site in the 2nd column (0).
+2. In the first column add the host name of the outlet's website, which is usually what comes between "https://" and the first "/", aka ending with ".com", ".org", etc. For example: "nytimes.com". Fill the abbreviated shorthand you want for the site in the 2nd column (0).
    
    <img src="/images/siteconfig.png" width="70%">
 3. Open an article, highlight some of the text that you want to extract. Right click and select inspect. 
