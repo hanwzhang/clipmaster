@@ -1,5 +1,5 @@
 # Welcome to Clipmaster!
-***Last update: 2023.2.2 V.5***
+***Last update: 2023.1.27 V.5***
 
 Clipmaster scrapes and formats the title, outlet, author and text content of a news article when given its url. 
 
@@ -28,8 +28,8 @@ Supports all the outlets put into its ***'site_configurations.xlsx'*** except fo
 4. Find ***'clipperprofile.txt'*** in Clipmaster's folder, replace the text in there with your profile path and save.
    
    <img src="/images/profileloc.png" width="70%">
-5. Close Edge completely and **use ANOTHER browser to monitor news**.
-6. This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
+5. Close Edge completely and **use ANOTHER browser to monitor news.
+6. ** This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
 
 ## Clipping an article
 
@@ -68,7 +68,9 @@ Wait for the clip to load. The first clip can take up to 2 mins, and error messa
    So we need to find a class shared only by all the desired text, or a class shared by all the desired plus some unwanted text, and fill it in the 3rd column (1).
 
    <img src="/images/include.png" width="70%">
+   <img src="/images/includecell.png" width="70%">
 
    Then, find the classes of the elements (or classes of their parents) that need to be excluded. Fill them in the 4th column (2) and separate them by a comma ",". **DO NOT ADD EXTRA SPACE AFTER THE COMMA**.
 
    <img src="/images/exclude.png" width="70%">
+   <img src="/images/excludecell.png" width="70%">
