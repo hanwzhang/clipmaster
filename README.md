@@ -23,12 +23,14 @@ Supports all the priority outlets on [our media monitoring sheet](https://docs.g
 1. [Download](https://drive.google.com/file/d/1VNW1G4KeiD8Fhhi1yaxTQHQ8x9Z_4wAo/view?usp=share_link) clipmaster.zip and unzip the file.
 2. Make sure Microsoft Edge is installed and you're logged in to the paywall-ed websites on Edge.
 3. Open a new tab in Edge and go to <i>'edge://version'</i>. Copy your 'Profile Path'. <img src="/images/profilepath.png" width="70%">
-4. Find <i>'clipperprofile.txt'</i> in Clipmaster's folder, replace the text in there with your profile path and save.
+4. Find <i>'clipperprofile.txt'</i> in Clipmaster's folder, replace the text in there with your profile path and save. <img src="/images/profileloc.png" width="70%">
 5. Close Edge completely and <b style="color:red">use ANOTHER browser to monitor news.</b> This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
 
 ## Clipping an article
 
-Click <i>'clipmaster.exe'</i>; When prompted paste article link into the window and hit Enter; Wait for the clip to load. The first clip can take up to 2 mins, and error messages are normal; Each clip after that takes about 10-15 seconds.
+Click <i>'clipmaster.exe'</i>; When prompted paste article link into the window and hit Enter.<img src="/images/startup.png" width="70%">
+
+Wait for the clip to load. The first clip can take up to 2 mins, and error messages are normal; Each clip after that takes about 10-15 seconds.<img src="/images/clipped.png" width="70%">
 
 Let's demo:
 
