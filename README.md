@@ -28,8 +28,8 @@ Supports all the outlets put into its ***'site_configurations.xlsx'*** except fo
 4. Find ***'clipperprofile.txt'*** in Clipmaster's folder, replace the text in there with your profile path and save.
    
    <img src="/images/profileloc.png" width="70%">
-5. Close Edge completely and **use ANOTHER browser to monitor news.
-6. ** This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
+5. Close Edge completely and **use ANOTHER browser to monitor news**.
+6. This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
 
 ## Clipping an article
 
