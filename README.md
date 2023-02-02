@@ -24,7 +24,7 @@ Supports all the priority outlets on [our media monitoring sheet](https://docs.g
 2. Make sure Microsoft Edge is installed and you're logged in to the paywall-ed websites on Edge.
 3. Open a new tab in Edge and go to <i>'edge://version'</i>. Copy your 'Profile Path'. <img src="/images/profilepath.png" width="70%">
 4. Find <i>'clipperprofile.txt'</i> in Clipmaster's folder, replace the text in there with your profile path and save. <img src="/images/profileloc.png" width="70%">
-5. Close Edge completely and <b style="color:red">use ANOTHER browser to monitor news.</b> This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
+5. Close Edge completely and <b>use ANOTHER browser to monitor news.</b> This is because Clipmaster starts Edge automatically, and running it manually at the same time will interfere with that.
 
 ## Clipping an article
 
