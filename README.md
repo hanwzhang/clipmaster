@@ -21,7 +21,7 @@ Supports all the outlets put into its ***'site_configurations.xlsx'*** except fo
 
 ## Installation
 
-1. [Download](https://drive.google.com/file/d/1VNW1G4KeiD8Fhhi1yaxTQHQ8x9Z_4wAo/view?usp=share_link) ***'clipmaster.zip'*** and unzip the file.
+1. [Download](https://github.com/hanwzhang/clipmaster/blob/main/clipmaster.zip) ***'clipmaster.zip'*** and unzip the file.
 2. Make sure Microsoft Edge is installed and you're logged in to the paywall-ed websites on Edge.
 3. Open a new tab in Edge and go to ***'edge://version'***. Copy your 'Profile Path'.
    
